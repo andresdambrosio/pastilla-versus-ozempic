@@ -10,7 +10,7 @@ export interface Rival {
   id: string;
   nombre: string;
   detalle: string;
-  fuente: string;
+  fuente: string; // id en src/data/fuentes.ts
   serie: number; // slot de color (--serie-N)
   // [semana, % de cambio de peso promedio]. Punto final = resultado publicado;
   // los intermedios son aproximaciones leídas de la curva publicada.
@@ -22,7 +22,7 @@ export const RIVALES: Rival[] = [
     id: 'ozempic',
     nombre: 'Ozempic',
     detalle: 'Semaglutida 2,4 mg semanal',
-    fuente: 'STEP-1, Wilding et al., NEJM 2021 (−14,9% a las 68 semanas)',
+    fuente: 'step-1',
     serie: 2,
     curva: [
       [0, 0], [4, -2.0], [8, -3.8], [12, -5.6], [16, -7.2], [20, -8.6],
@@ -33,7 +33,7 @@ export const RIVALES: Rival[] = [
     id: 'mounjaro',
     nombre: 'Mounjaro',
     detalle: 'Tirzepatida 15 mg semanal',
-    fuente: 'SURMOUNT-1, Jastreboff et al., NEJM 2022 (−20,9% a las 72 semanas)',
+    fuente: 'surmount-1',
     serie: 3,
     curva: [
       [0, 0], [4, -2.6], [8, -5.0], [12, -7.4], [16, -9.5], [20, -11.4],

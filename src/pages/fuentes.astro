@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { DESAFIO, RIVALES } from '../data/desafio';
+import { FUENTES, linkFuente, fuente } from '../data/fuentes';
+import { kg } from '../lib/stats';
+---
+
+<Base titulo="Fuentes" descripcion="De dónde sale cada número del blog.">
+  <div class="prosa">
+    <h1>Fuentes</h1>
+    <p class="muted">
+      De dónde sale cada número del blog. Los ensayos clínicos están financiados por los laboratorios que fabrican
+      cada droga; lo aclaro en cada uno.
+    </p>
+
+    <h2>Sobre los nombres</h2>
+    <p>
+      "Ozempic" es el nombre comercial de la semaglutida para diabetes. La versión para bajar de peso, con la dosis de
+      2,4 mg que se usó en los ensayos STEP, se vende como <strong>Wegovy</strong>. "Mounjaro" es la tirzepatida; para
+      obesidad se vende como <strong>Zepbound</strong>. Uso Ozempic y Mounjaro porque son los nombres que todos conocen,
+      pero las curvas son las de las dosis para obesidad.
+    </p>
+
+    <h2 id="calculos">Cálculos propios</h2>
+    <ul>
+      <li>
+        <strong>Día 0:</strong> {DESAFIO.inicio.split('-').reverse().join('/')} con {kg(DESAFIO.pesoInicial)} kg. Altura
+        {kg(DESAFIO.altura, 2)} m. Meta {DESAFIO.meta} kg.
+      </li>
+      <li>
+        <strong>Promedio de 7 días:</strong> el promedio de los pesajes de los últimos 7 días, incluido el de hoy. Es el
+        número oficial del marcador, porque el peso de un solo día varía mucho.
+      </li>
+      <li><strong>IMC:</strong> peso dividido por la altura al cuadrado (<a href="#oms-imc">OMS</a>).</li>
+      <li>
+        <strong>Curvas de los rivales:</strong> parten de mis {kg(DESAFIO.pesoInicial)} kg y bajan según el cambio de peso
+        promedio de cada ensayo. El punto final es el resultado publicado
+        ({RIVALES.map((r, i) => <>{i > 0 && ' y '}<a href={`#${r.fuente}`}>{fuente(r.fuente).corto}</a></>)}). Los
+        puntos intermedios son aproximaciones mías de la forma de la curva publicada, y entre un punto y el siguiente
+        la curva sigue una línea recta. Por eso el "Ozempic promedio hoy" del marcador es una estimación, no un dato del
+        ensayo.
+      </li>
+      <li>
+        <strong>Es un promedio:</strong> en los ensayos hubo gente que bajó mucho más y gente que bajó muy poco. El
+        rival es el paciente típico, no el mejor.
+      </li>
+    </ul>
+
+    <h2>Estudios</h2>
+    <ol class="fuentes">
+      {FUENTES.map((f) => (
+        <li id={f.id}>
+          <p class="cita">
+            {f.autores} <a href={linkFuente(f)} rel="noopener">{f.titulo}</a>. <em>{f.revista}</em>.
+            {f.doi && <span class="muted"> doi:{f.doi}</span>}
+          </p>
+          <p class="muted chico">
+            <strong>{f.corto}</strong>
+            {f.financiamiento && <> · Financiado por {f.financiamiento}</>}
+          </p>
+          <ul class="chico">
+            {f.usamos.map((u) => <li>{u}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .fuentes { padding-left: 24px; display: grid; gap: 20px; }
+  .fuentes > li { scroll-margin-top: 24px; }
+  .fuentes > li:target { background: color-mix(in srgb, var(--accent) 8%, transparent); border-radius: 8px; }
+  .cita { margin: 0; }
+  .fuentes p.chico { margin: 2px 0 0; }
+  .fuentes ul { margin: 6px 0 0; padding-left: 18px; color: var(--text-2); }
+  h2 { scroll-margin-top: 24px; }
+</style>

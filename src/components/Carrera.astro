@@ -1,6 +1,7 @@
 ---
 // La carrera completa (72 semanas) y el zoom de las últimas semanas.
 import Grafico, { type Serie } from './Grafico.astro';
+import Cita from './Cita.astro';
 import { DESAFIO, RIVALES } from '../data/desafio';
 import { kg, fechaCorta, fechaDeDia, getDiario, promedioMovil, seriePeso, serieRival } from '../lib/stats';
 
@@ -65,9 +66,33 @@ const xTicksZoom = Array.from({ length: Math.floor(finZoom / 7) + 1 }, (_, i) =>
       alto={320}
     />
   </div>
+  {
+    !soloZoom && (
+      <aside class="tarjeta nota">
+        <h3>¿Por qué se aplanan las curvas?</h3>
+        <p>
+          En los ensayos, la bajada es fuerte mientras se sube la dosis y después cada vez más lenta. Semaglutida se
+          planta cerca de −15%<Cita id="step-1" /> y sigue ahí a los 2 años<Cita id="step-5" />; en otro ensayo el peso
+          bajó hasta la semana 65 y se mantuvo hasta 4 años<Cita id="select" />. Con tirzepatida pasa lo mismo, cerca
+          de −21%<Cita id="surmount-1" />.
+        </p>
+        <p>
+          El motivo: al bajar de peso el cuerpo gasta menos energía y pide más comida, hasta que se equilibra en un peso
+          nuevo<Cita id="hall-kahan-2018" />. Con dieta pasa lo mismo, y la meseta suele llegar a los 6
+          meses<Cita id="franz-2007" />. Y si se deja la droga, el peso vuelve: alrededor de dos tercios de lo bajado en
+          un año con semaglutida<Cita id="step-1-extension" /> y un 14% del peso con tirzepatida<Cita id="surmount-4" />.
+        </p>
+        <p class="muted chico">
+          Mi meta de {DESAFIO.meta} kg está por debajo de donde se plantan los dos. La carrera de verdad se juega cuando
+          ellos ya están quietos.
+        </p>
+      </aside>
+    )
+  }
   <p class="muted chico fuentes">
-    Fuentes: {RIVALES.map((r, i) => <span>{i > 0 && ' · '}{r.nombre}: {r.fuente}</span>)}. Los puntos intermedios de
-    cada curva son aproximados. <a href="/datos/">Ver los datos en tabla</a>.
+    Curvas: {RIVALES.map((r, i) => <>{i > 0 && ' · '}{r.nombre}, promedio de {r.detalle.toLowerCase()}<Cita id={r.fuente} /></>)}.
+    Los puntos intermedios son aproximados: <a href="/fuentes/#calculos">cómo se calculan</a> ·
+    <a href="/datos/">ver los datos en tabla</a>.
   </p>
 </div>
 
@@ -75,4 +100,7 @@ const xTicksZoom = Array.from({ length: Math.floor(finZoom / 7) + 1 }, (_, i) =>
   .graficos { display: grid; gap: 16px; }
   .graficos > * { min-width: 0; }
   .fuentes { margin: 0; }
+  .nota h3 { margin: 0 0 8px; }
+  .nota p { margin: 0 0 10px; max-width: 680px; }
+  .nota p:last-child { margin: 0; }
 </style>
