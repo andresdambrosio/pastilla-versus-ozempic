@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+
+const { titulo, descripcion = 'Un tipo, una balanza y la curva promedio de Ozempic. ¿Se le puede ganar a la pastilla con esfuerzo?' } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · Pastilla vs Ozempic` : 'Pastilla vs Ozempic';
+const ruta = Astro.url.pathname;
+
+const nav = [
+  { href: '/', label: 'Carrera' },
+  { href: '/escritos/', label: 'Escritos' },
+  { href: '/diario/', label: 'Diario' },
+  { href: '/datos/', label: 'Datos' },
+  { href: '/reglamento/', label: 'Reglamento' },
+];
+const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="cabecera">
+      <div class="contenedor fila">
+        <a href="/" class="marca">Pastilla <span>vs</span> Ozempic</a>
+        <nav>
+          {nav.map((n) => <a href={n.href} aria-current={activo(n.href) ? 'page' : undefined}>{n.label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main class="contenedor">
+      <slot />
+    </main>
+    <footer class="contenedor pie muted chico">
+      <p>
+        Esto es un desafío personal, no un consejo médico ni una campaña contra ningún medicamento. Si estás pensando
+        en bajar de peso, hablalo con tu médico.
+      </p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .cabecera {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 32px;
+  }
+  .fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .marca {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .marca span { color: var(--text-3); font-size: 1.1rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  nav a { color: var(--text-2); text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+  nav a:hover { color: var(--text); }
+  nav a[aria-current='page'] { color: var(--text); text-decoration: underline; text-decoration-thickness: 2px; }
+  .pie { margin-top: 64px; padding-top: 16px; padding-bottom: 32px; border-top: 1px solid var(--border); }
+</style>

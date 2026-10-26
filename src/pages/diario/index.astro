@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import DatosDelDia from '../../components/DatosDelDia.astro';
+import { diaDelDesafio, fechaLarga, getDiario } from '../../lib/stats';
+
+const dias = (await getDiario()).reverse();
+---
+
+<Base titulo="Diario">
+  <h1>Diario</h1>
+  <p class="muted">Todo lo que como, duermo y camino. Sin filtro.</p>
+  <ul class="lista">
+    {dias.map((d) => (
+      <li class="tarjeta">
+        <span class="etiqueta">Día {diaDelDesafio(d.data.fecha) + 1}</span>
+        <h2><a href={`/diario/${d.id}/`}>{fechaLarga(d.data.fecha)}</a></h2>
+        <DatosDelDia dia={d} />
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .lista { list-style: none; padding: 0; display: grid; gap: 12px; }
+  h2 { margin: 4px 0 10px; font-size: 1.4rem; }
+  h2 a { color: var(--text); text-decoration: none; }
+  h2 a:first-letter { text-transform: uppercase; }
+  h2 a:hover { text-decoration: underline; }
+</style>

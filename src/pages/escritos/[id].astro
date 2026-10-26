@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { fechaLarga } from '../../lib/stats';
+
+export async function getStaticPaths() {
+  const escritos = await getCollection('escritos');
+  return escritos.map((e) => ({ params: { id: e.id }, props: { escrito: e } }));
+}
+
+const { escrito } = Astro.props;
+const { Content } = await render(escrito);
+---
+
+<Base titulo={escrito.data.titulo} descripcion={escrito.data.resumen}>
+  <article class="prosa">
+    <span class="etiqueta">{fechaLarga(escrito.data.fecha)}</span>
+    {escrito.data.borrador && <span class="borrador">Borrador</span>}
+    <h1>{escrito.data.titulo}</h1>
+    <Content />
+  </article>
+  <p><a href="/escritos/">← Todos los escritos</a></p>
+</Base>
+
+<style>
+  .borrador { margin-left: 8px; }
+  h1 { margin-top: 8px; }
+</style>

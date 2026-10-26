@@ -1,0 +1,213 @@
+---
+// Gráfico de líneas en SVG, sin librerías. El eje x son días desde el inicio del desafío.
+import { DESAFIO } from '../data/desafio';
+import { kg, type Punto } from '../lib/stats';
+
+export interface Serie {
+  id: string;
+  nombre: string;
+  color: number; // slot --serie-N
+  estilo: 'linea' | 'trazos' | 'puntos';
+  puntos: Punto[];
+  etiquetaFinal?: 'derecha' | 'arriba';
+  etiqueta?: string; // texto corto para la etiqueta final; por defecto, el nombre
+}
+
+interface Props {
+  titulo: string;
+  subtitulo?: string;
+  series: Serie[];
+  x: [number, number];
+  y: [number, number];
+  xTicks: { v: number; label: string }[];
+  yTicks: number[];
+  referencias?: { y: number; label: string }[];
+  alto?: number;
+}
+
+const { titulo, subtitulo, series, x, y, xTicks, yTicks, referencias = [], alto = 360 } = Astro.props;
+
+const W = 720;
+const H = alto;
+const m = { t: 16, r: 112, b: 32, l: 40 };
+const pw = W - m.l - m.r;
+const ph = H - m.t - m.b;
+const sx = (v: number) => m.l + ((v - x[0]) / (x[1] - x[0])) * pw;
+const sy = (v: number) => m.t + (1 - (v - y[0]) / (y[1] - y[0])) * ph;
+const path = (pts: Punto[]) => pts.map((p, i) => `${i ? 'L' : 'M'}${sx(p.x).toFixed(1)},${sy(p.y).toFixed(1)}`).join('');
+
+// Las líneas se dibujan abajo; los puntos encima.
+const orden = [...series].sort((a, b) => Number(a.estilo === 'puntos') - Number(b.estilo === 'puntos'));
+
+const config = JSON.stringify({
+  W, x0: x[0], x1: x[1], l: m.l, pw, t: m.t, ph, y0: y[0], y1: y[1],
+  inicio: DESAFIO.inicio,
+  series: series.map((s) => ({ nombre: s.nombre, color: s.color, estilo: s.estilo, puntos: s.puntos })),
+});
+---
+
+<figure class="grafico" data-grafico={config}>
+  <figcaption>
+    <h3>{titulo}</h3>
+    {subtitulo && <p class="muted chico">{subtitulo}</p>}
+    {
+      series.length > 1 && (
+        <ul class="leyenda">
+          {series.map((s) => (
+            <li>
+              <svg width="22" height="10" aria-hidden="true">
+                {s.estilo === 'puntos' ? (
+                  <circle cx="11" cy="5" r="4" fill={`var(--serie-${s.color})`} />
+                ) : (
+                  <line x1="1" y1="5" x2="21" y2="5" stroke={`var(--serie-${s.color})`} stroke-width="2"
+                    stroke-linecap="round" stroke-dasharray={s.estilo === 'trazos' ? '5 4' : undefined} />
+                )}
+              </svg>
+              {s.nombre}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </figcaption>
+  <div class="lienzo">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${titulo}. ${subtitulo ?? ''}`}>
+      <g class="ejes">
+        {yTicks.map((v) => (
+          <g>
+            <line x1={m.l} x2={m.l + pw} y1={sy(v)} y2={sy(v)} />
+            <text x={m.l - 8} y={sy(v)} dy="0.32em" text-anchor="end">{v}</text>
+          </g>
+        ))}
+        {xTicks.map((t) => (
+          <text x={sx(t.v)} y={H - 8} text-anchor="middle">{t.label}</text>
+        ))}
+      </g>
+
+      {referencias.map((r) => (
+        <g class="referencia">
+          <line x1={m.l} x2={m.l + pw} y1={sy(r.y)} y2={sy(r.y)} />
+          <text x={m.l + pw + 8} y={sy(r.y)} dy="0.32em">{r.label}</text>
+        </g>
+      ))}
+
+      {orden.map((s) => {
+        const color = `var(--serie-${s.color})`;
+        if (s.estilo === 'puntos') {
+          return s.puntos.map((p) => <circle class="punto" cx={sx(p.x)} cy={sy(p.y)} r="4" fill={color} />);
+        }
+        const fin = s.puntos[s.puntos.length - 1];
+        return (
+          <g>
+            <path d={path(s.puntos)} fill="none" stroke={color} stroke-width="2" stroke-linejoin="round"
+              stroke-linecap="round" stroke-dasharray={s.estilo === 'trazos' ? '6 5' : undefined} />
+            {s.etiquetaFinal && (
+              <g>
+                <circle class="punto" cx={sx(fin.x)} cy={sy(fin.y)} r="4" fill={color} />
+                <text class="etiqueta-final" x={sx(fin.x) + (s.etiquetaFinal === 'arriba' ? -4 : 8)}
+                  y={sy(fin.y) - (s.etiquetaFinal === 'arriba' ? 14 : 0)} dy="0.32em">
+                  {s.etiqueta ?? s.nombre} {kg(fin.y)}
+                </text>
+              </g>
+            )}
+          </g>
+        );
+      })}
+
+      <line class="cruz" x1="0" x2="0" y1={m.t} y2={m.t + ph} visibility="hidden" />
+      <rect class="zona" x={m.l} y={m.t} width={pw} height={ph} fill="transparent" />
+    </svg>
+    <div class="tip" hidden></div>
+  </div>
+</figure>
+
+<script>
+  type Pt = { x: number; y: number };
+  type Cfg = {
+    W: number; x0: number; x1: number; l: number; pw: number; inicio: string;
+    series: { nombre: string; color: number; estilo: string; puntos: Pt[] }[];
+  };
+
+  const valorEn = (s: Cfg['series'][number], x: number) => {
+    const p = s.puntos;
+    if (s.estilo === 'puntos') return p.find((q) => q.x === x)?.y;
+    if (!p.length || x < p[0].x || x > p[p.length - 1].x) return undefined;
+    for (let i = 1; i < p.length; i++) {
+      if (x <= p[i].x) return p[i - 1].y + ((x - p[i - 1].x) / (p[i].x - p[i - 1].x)) * (p[i].y - p[i - 1].y);
+    }
+    return p[0].y;
+  };
+  const kg = (n: number) => n.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  document.querySelectorAll<HTMLElement>('[data-grafico]').forEach((fig) => {
+    const cfg: Cfg = JSON.parse(fig.dataset.grafico!);
+    const svg = fig.querySelector('svg[role="img"]') as SVGSVGElement;
+    const cruz = svg.querySelector('.cruz') as SVGLineElement;
+    const tip = fig.querySelector('.tip') as HTMLElement;
+    const inicio = Date.parse(`${cfg.inicio}T00:00:00Z`);
+
+    const ocultar = () => { tip.hidden = true; cruz.setAttribute('visibility', 'hidden'); };
+
+    svg.addEventListener('pointermove', (e) => {
+      const r = svg.getBoundingClientRect();
+      const escala = r.width / cfg.W;
+      const px = (e.clientX - r.left) / escala;
+      const x = Math.round(cfg.x0 + ((px - cfg.l) / cfg.pw) * (cfg.x1 - cfg.x0));
+      if (x < cfg.x0 || x > cfg.x1) return ocultar();
+
+      const filas = cfg.series
+        .map((s) => ({ s, v: valorEn(s, x) }))
+        .filter((f): f is { s: typeof f.s; v: number } => f.v !== undefined);
+      if (!filas.length) return ocultar();
+
+      const fecha = new Date(inicio + x * 86_400_000).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+      tip.innerHTML =
+        `<strong>${fecha}</strong> <span>· día ${x + 1}</span>` +
+        filas.map(({ s, v }) => `<div><i style="background:var(--serie-${s.color})"></i>${s.nombre}<b>${kg(v)} kg</b></div>`).join('');
+
+      const cx = cfg.l + ((x - cfg.x0) / (cfg.x1 - cfg.x0)) * cfg.pw;
+      cruz.setAttribute('x1', String(cx));
+      cruz.setAttribute('x2', String(cx));
+      cruz.setAttribute('visibility', 'visible');
+      tip.hidden = false;
+      const izq = cx * escala + 12;
+      tip.style.left = `${izq + tip.offsetWidth > r.width ? cx * escala - tip.offsetWidth - 12 : izq}px`;
+    });
+    svg.addEventListener('pointerleave', ocultar);
+  });
+</script>
+
+<style>
+  .grafico { margin: 0; }
+  figcaption h3 { margin: 0 0 4px; }
+  figcaption p { margin: 0 0 8px; }
+  .leyenda { display: flex; flex-wrap: wrap; gap: 4px 16px; list-style: none; padding: 0; margin: 8px 0 4px; font-size: 0.875rem; color: var(--text-2); }
+  .leyenda li { display: flex; align-items: center; gap: 6px; }
+  .lienzo { position: relative; overflow-x: auto; }
+  /* En pantallas angostas el gráfico no se achica más: se desliza para no volver ilegibles los textos. */
+  svg[role='img'] { display: block; width: 100%; min-width: 600px; height: auto; touch-action: pan-x pan-y; }
+  .ejes line { stroke: var(--grid); stroke-width: 1; }
+  .ejes text, .referencia text { fill: var(--text-3); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .referencia line { stroke: var(--text-3); stroke-width: 1; }
+  .punto { stroke: var(--surface); stroke-width: 2; }
+  .etiqueta-final { fill: var(--text); font-size: 13px; font-weight: 600; }
+  .cruz { stroke: var(--text-3); stroke-width: 1; pointer-events: none; }
+  .tip {
+    position: absolute;
+    top: 8px;
+    pointer-events: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .tip :global(span) { color: var(--text-3); }
+  .tip :global(div) { display: flex; align-items: center; gap: 6px; }
+  .tip :global(i) { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .tip :global(b) { margin-left: auto; padding-left: 12px; font-variant-numeric: tabular-nums; }
+</style>

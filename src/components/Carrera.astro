@@ -1,0 +1,78 @@
+---
+// La carrera completa (72 semanas) y el zoom de las últimas semanas.
+import Grafico, { type Serie } from './Grafico.astro';
+import { DESAFIO, RIVALES } from '../data/desafio';
+import { kg, fechaCorta, fechaDeDia, getDiario, promedioMovil, seriePeso, serieRival } from '../lib/stats';
+
+interface Props { soloZoom?: boolean }
+const { soloZoom = false } = Astro.props;
+
+const pesos = seriePeso(await getDiario());
+const promedio = promedioMovil(pesos);
+const ultimo = pesos[pesos.length - 1].x;
+
+// Carrera completa
+const FIN = 72 * 7;
+const carrera: Serie[] = [
+  { id: 'pastilla', nombre: 'Pastilla (promedio 7 días)', color: 1, estilo: 'linea', puntos: promedio, etiquetaFinal: 'arriba', etiqueta: 'Pastilla' },
+  ...RIVALES.map((r): Serie => ({
+    id: r.id, nombre: r.nombre, color: r.serie, estilo: 'trazos', puntos: serieRival(r, FIN), etiquetaFinal: 'derecha',
+  })),
+];
+const semanas = Array.from({ length: 10 }, (_, i) => i * 8).filter((w) => w <= 72);
+
+// Zoom: desde el día 0 hasta una semana después del último pesaje (mínimo 4 semanas)
+const finZoom = Math.max(27, Math.ceil((ultimo + 7) / 7) * 7 - 1);
+const zoom: Serie[] = [
+  { id: 'pesajes', nombre: 'Pesajes', color: 1, estilo: 'puntos', puntos: pesos },
+  { id: 'promedio', nombre: 'Pastilla (promedio 7 días)', color: 1, estilo: 'linea', puntos: promedio, etiquetaFinal: 'arriba', etiqueta: 'Pastilla' },
+  ...RIVALES.map((r): Serie => ({
+    id: r.id, nombre: r.nombre, color: r.serie, estilo: 'trazos', puntos: serieRival(r, finZoom), etiquetaFinal: 'derecha',
+  })),
+];
+const valores = zoom.flatMap((s) => s.puntos.map((p) => p.y));
+const yZoom: [number, number] = [Math.floor(Math.min(...valores) - 0.5), Math.ceil(Math.max(...valores) + 0.5)];
+const yTicksZoom = Array.from({ length: yZoom[1] - yZoom[0] + 1 }, (_, i) => yZoom[0] + i);
+const xTicksZoom = Array.from({ length: Math.floor(finZoom / 7) + 1 }, (_, i) => ({ v: i * 7, label: fechaCorta(fechaDeDia(i * 7)) }));
+---
+
+<div class="graficos">
+  {
+    !soloZoom && (
+      <div class="tarjeta">
+        <Grafico
+          titulo="La carrera completa"
+          subtitulo={`Peso en kg desde el ${fechaCorta(fechaDeDia(0))}. Los rivales arrancan con mis ${kg(DESAFIO.pesoInicial)} kg y siguen la curva promedio de su ensayo clínico.`}
+          series={carrera}
+          x={[0, FIN]}
+          y={[90, 130]}
+          xTicks={semanas.map((w) => ({ v: w * 7, label: w === 0 ? 'Sem 0' : `${w}` }))}
+          yTicks={[90, 100, 110, 120, 130]}
+          referencias={[{ y: DESAFIO.meta, label: `Meta ${DESAFIO.meta} kg` }]}
+        />
+      </div>
+    )
+  }
+  <div class="tarjeta">
+    <Grafico
+      titulo="Las últimas semanas, de cerca"
+      subtitulo="Cada punto es un pesaje en ayunas. La línea es el promedio de los últimos 7 pesajes: el marcador oficial."
+      series={zoom}
+      x={[0, finZoom]}
+      y={yZoom}
+      xTicks={xTicksZoom}
+      yTicks={yTicksZoom}
+      alto={320}
+    />
+  </div>
+  <p class="muted chico fuentes">
+    Fuentes: {RIVALES.map((r, i) => <span>{i > 0 && ' · '}{r.nombre}: {r.fuente}</span>)}. Los puntos intermedios de
+    cada curva son aproximados. <a href="/datos/">Ver los datos en tabla</a>.
+  </p>
+</div>
+
+<style>
+  .graficos { display: grid; gap: 16px; }
+  .graficos > * { min-width: 0; }
+  .fuentes { margin: 0; }
+</style>

@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { fechaCorta, getDiario } from '../lib/stats';
+
+const reglas = (await getDiario()).flatMap((d) => d.data.reglas.map((texto) => ({ texto, dia: d })));
+---
+
+<Base titulo="Reglamento">
+  <h1>El Reglamento de Pastilla</h1>
+  <p class="muted prosa">Cada error deja una regla. Se suman en el diario, día a día, y se juntan acá.</p>
+  <ol class="reglas">
+    {reglas.map((r) => (
+      <li class="tarjeta">
+        <p>{r.texto}</p>
+        <a class="chico" href={`/diario/${r.dia.id}/`}>Nació el {fechaCorta(r.dia.data.fecha)}</a>
+      </li>
+    ))}
+  </ol>
+</Base>
+
+<style>
+  .reglas { list-style: none; counter-reset: regla; padding: 0; display: grid; gap: 12px; max-width: 680px; }
+  .reglas li { counter-increment: regla; position: relative; padding-left: 64px; }
+  .reglas li::before {
+    content: counter(regla);
+    position: absolute;
+    left: 20px;
+    top: 14px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--text-3);
+  }
+  .reglas p { margin: 0 0 4px; font-size: 1.1rem; }
+</style>

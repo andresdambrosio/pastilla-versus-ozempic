@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { fechaCorta } from '../../lib/stats';
+
+const escritos = (await getCollection('escritos')).sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
+const tipos = { semanal: 'Resumen semanal', ensayo: 'Ensayo' };
+---
+
+<Base titulo="Escritos">
+  <h1>Escritos</h1>
+  <p class="muted">Resúmenes de cada semana y textos sobre lo que voy aprendiendo.</p>
+  <ul class="lista">
+    {escritos.map((e) => (
+      <li class="tarjeta">
+        <span class="etiqueta">{tipos[e.data.tipo]} · {fechaCorta(e.data.fecha)}</span>
+        {e.data.borrador && <span class="borrador">Borrador</span>}
+        <h2><a href={`/escritos/${e.id}/`}>{e.data.titulo}</a></h2>
+        <p>{e.data.resumen}</p>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .lista { list-style: none; padding: 0; display: grid; gap: 16px; }
+  h2 { margin: 6px 0; font-size: 1.6rem; }
+  h2 a { color: var(--text); text-decoration: none; }
+  h2 a:hover { text-decoration: underline; }
+  p { margin: 0; color: var(--text-2); }
+  .borrador { margin-left: 8px; }
+</style>

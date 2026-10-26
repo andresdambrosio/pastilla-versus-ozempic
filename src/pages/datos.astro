@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Carrera from '../components/Carrera.astro';
+import { RIVALES } from '../data/desafio';
+import { diaDelDesafio, fechaCorta, getDiario, horas, kg, pasos, pesoRival, promedioMovil, seriePeso } from '../lib/stats';
+
+const dias = await getDiario();
+const promedio = new Map(promedioMovil(seriePeso(dias)).map((p) => [p.x, p.y]));
+const filas = dias.reverse().map((d) => {
+  const x = diaDelDesafio(d.data.fecha);
+  return { d, x, prom: promedio.get(x), rivales: RIVALES.map((r) => pesoRival(r, x)) };
+});
+---
+
+<Base titulo="Datos">
+  <h1>Datos</h1>
+  <p class="muted">Todos los números, sin adornos.</p>
+
+  <Carrera soloZoom />
+
+  <h2>Día por día</h2>
+  <div class="tabla-scroll tarjeta">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Día</th>
+          <th class="num">Peso</th>
+          <th class="num">Prom. 7 días</th>
+          {RIVALES.map((r) => <th class="num">{r.nombre}</th>)}
+          <th class="num">Sueño</th>
+          <th class="num">Pasos</th>
+          <th class="num">Agua</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filas.map(({ d, x, prom, rivales }) => (
+          <tr>
+            <td><a href={`/diario/${d.id}/`}>{fechaCorta(d.data.fecha)}</a></td>
+            <td>{x + 1}</td>
+            <td class="num">{d.data.peso !== undefined ? kg(d.data.peso) : '—'}</td>
+            <td class="num">{prom !== undefined ? kg(prom) : '—'}</td>
+            {rivales.map((v) => <td class="num muted">{kg(v)}</td>)}
+            <td class="num">{d.data.sueno !== undefined ? horas(d.data.sueno) : '—'}</td>
+            <td class="num">{d.data.pasos !== undefined ? pasos(d.data.pasos) : '—'}</td>
+            <td class="num">{d.data.agua !== undefined ? `${kg(d.data.agua)} l` : '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</Base>
+
+<style>
+  .tabla-scroll { padding: 8px; }
+  td, th { white-space: nowrap; }
+</style>

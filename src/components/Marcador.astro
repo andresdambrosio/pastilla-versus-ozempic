@@ -1,0 +1,80 @@
+---
+import { DESAFIO, RIVALES } from '../data/desafio';
+import { fechaCorta, getDiario, imc, kg, pesoRival, promedioMovil, seriePeso, fechaDeDia } from '../lib/stats';
+
+const pesos = seriePeso(await getDiario());
+const prom = promedioMovil(pesos);
+const ultimo = pesos[pesos.length - 1];
+const actual = prom[prom.length - 1].y;
+
+const bajado = DESAFIO.pesoInicial - actual;
+const total = DESAFIO.pesoInicial - DESAFIO.meta;
+const avance = Math.max(0, Math.min(1, bajado / total));
+
+const ozempic = RIVALES[0];
+const rival = pesoRival(ozempic, ultimo.x);
+const diferencia = rival - actual; // > 0: Pastilla va adelante (pesa menos)
+const veredicto =
+  Math.abs(diferencia) < 0.1 ? 'Empate técnico' : diferencia > 0 ? `${kg(diferencia)} kg adelante` : `${kg(-diferencia)} kg atrás`;
+const estado = Math.abs(diferencia) < 0.1 ? 'empate' : diferencia > 0 ? 'adelante' : 'atras';
+---
+
+<section class="marcador" aria-label="Marcador">
+  <div class="tarjeta hero">
+    <span class="etiqueta">Día {ultimo.x + 1} · {fechaCorta(fechaDeDia(ultimo.x))}</span>
+    <div class="cifra">{kg(actual)}<small>kg</small></div>
+    <p class="muted chico">
+      Promedio de 7 días · último pesaje {kg(ultimo.y)} kg · IMC {kg(imc(actual))}
+    </p>
+  </div>
+
+  <div class="tarjeta">
+    <span class="etiqueta">Bajado</span>
+    <div class="valor">{bajado >= 0 ? '−' : '+'}{kg(Math.abs(bajado))} kg</div>
+    <p class="muted chico">desde {kg(DESAFIO.pesoInicial)} kg el día 0</p>
+  </div>
+
+  <div class="tarjeta">
+    <span class="etiqueta">Falta para {DESAFIO.meta} kg</span>
+    <div class="valor">{kg(Math.max(0, actual - DESAFIO.meta))} kg</div>
+    <div class="barra" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(avance * 100)}
+      aria-label="Avance hacia la meta">
+      <span style={`width:${Math.max(avance * 100, 1)}%`}></span>
+    </div>
+    <p class="muted chico">{Math.round(avance * 100)}% del camino</p>
+  </div>
+
+  <div class="tarjeta">
+    <span class="etiqueta">Contra {ozempic.nombre}</span>
+    <div class={`valor ${estado}`}>{veredicto}</div>
+    <p class="muted chico">{ozempic.nombre} promedio hoy: {kg(rival)} kg</p>
+  </div>
+</section>
+
+<style>
+  .marcador {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0 16px;
+  }
+  .hero { grid-column: 1 / -1; }
+  .cifra {
+    font-size: clamp(3.5rem, 12vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 8px 0;
+  }
+  .cifra small { font-size: 1.5rem; font-weight: 500; color: var(--text-2); margin-left: 6px; }
+  .valor { font-size: 1.6rem; font-weight: 600; margin: 4px 0; font-variant-numeric: tabular-nums; }
+  .valor.adelante::before { content: '▲ '; color: var(--bueno); font-size: 0.9rem; vertical-align: middle; }
+  .valor.atras::before { content: '▼ '; color: var(--malo); font-size: 0.9rem; vertical-align: middle; }
+  .valor.empate::before { content: '= '; color: var(--text-3); }
+  .tarjeta p { margin: 0; }
+  .barra { height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--serie-1) 18%, transparent); margin: 10px 0 6px; overflow: hidden; }
+  .barra span { display: block; height: 100%; background: var(--serie-1); border-radius: 99px; }
+  @media (max-width: 640px) {
+    .marcador { grid-template-columns: 1fr; }
+  }
+</style>

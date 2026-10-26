@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Marcador from '../components/Marcador.astro';
+import Carrera from '../components/Carrera.astro';
+import DatosDelDia from '../components/DatosDelDia.astro';
+import { DESAFIO } from '../data/desafio';
+import { diaDelDesafio, fechaCorta, getDiario, kg } from '../lib/stats';
+
+const escritos = (await getCollection('escritos')).sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
+const diario = (await getDiario()).reverse().slice(0, 3);
+---
+
+<Base>
+  <section class="intro">
+    <h1>¿Se le puede ganar a la pastilla?</h1>
+    <p class="bajada">
+      Arranqué el {fechaCorta(new Date(`${DESAFIO.inicio}T00:00:00Z`))} con {kg(DESAFIO.pesoInicial)} kg. Quiero llegar
+      a {DESAFIO.meta} kg sin Ozempic: con comida, movimiento, sueño y cabeza. Mi rival es la curva promedio de los
+      que se inyectan.
+    </p>
+  </section>
+
+  <Marcador />
+  <Carrera />
+
+  <h2>Escritos</h2>
+  <ul class="lista">
+    {escritos.map((e) => (
+      <li>
+        <a href={`/escritos/${e.id}/`}>{e.data.titulo}</a>
+        {e.data.borrador && <span class="borrador">Borrador</span>}
+        <p class="muted chico">{fechaCorta(e.data.fecha)} · {e.data.resumen}</p>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Últimos días</h2>
+  <ul class="lista">
+    {diario.map((d) => (
+      <li>
+        <a href={`/diario/${d.id}/`}>Día {diaDelDesafio(d.data.fecha) + 1} · {fechaCorta(d.data.fecha)}</a>
+        <DatosDelDia dia={d} />
+      </li>
+    ))}
+  </ul>
+  <p><a href="/diario/">Todo el diario →</a></p>
+</Base>
+
+<style>
+  .intro { max-width: 680px; }
+  .bajada { font-size: 1.125rem; color: var(--text-2); margin: 0; }
+  .lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 20px; }
+  .lista a { font-weight: 600; font-size: 1.1rem; margin-right: 8px; }
+  .lista p { margin: 2px 0 0; }
+  .lista :global(.datos) { margin-top: 6px; }
+</style>

@@ -1,0 +1,109 @@
+:root {
+  color-scheme: light;
+  --bg: #fcfcfb;
+  --surface: #ffffff;
+  --border: #e6e5e0;
+  --grid: #ecebe7;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --text-3: #75746f;
+  --accent: #2a78d6;
+  --serie-1: #2a78d6; /* Pastilla */
+  --serie-2: #eb6834; /* Ozempic */
+  --serie-3: #1baf7a; /* Mounjaro */
+  --bueno: #008300;
+  --malo: #e34948;
+  --font: 'Inter', system-ui, sans-serif;
+  --font-display: 'Barlow Condensed', 'Inter', system-ui, sans-serif;
+  --ancho: 880px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #141413;
+    --surface: #1a1a19;
+    --border: #2e2e2c;
+    --grid: #2a2a28;
+    --text: #f0efec;
+    --text-2: #c3c2b7;
+    --text-3: #9a998f;
+    --accent: #3987e5;
+    --serie-1: #3987e5;
+    --serie-2: #d95926;
+    --serie-3: #199e70;
+    --bueno: #3fae3f;
+    --malo: #e66767;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 var(--font);
+}
+
+a { color: var(--accent); text-underline-offset: 3px; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); margin: 0 0 0.5rem; }
+h2 { font-size: 1.8rem; margin: 2.5rem 0 0.75rem; }
+h3 { font-size: 1.3rem; margin: 1.5rem 0 0.5rem; }
+
+.contenedor { max-width: var(--ancho); margin: 0 auto; padding: 0 16px; }
+
+.muted { color: var(--text-3); }
+.chico { font-size: 0.875rem; }
+
+.tarjeta {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.etiqueta {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+
+.borrador {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px dashed var(--text-3);
+  color: var(--text-2);
+}
+
+.prosa { max-width: 680px; }
+.prosa blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text-2);
+  font-style: italic;
+}
+
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+th { font-size: 0.8rem; color: var(--text-3); font-weight: 600; }
+.tabla-scroll { overflow-x: auto; }
+.num { text-align: right; }
