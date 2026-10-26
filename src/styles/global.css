@@ -37,6 +37,24 @@
   }
 }
 
+/* El selector de tema de la cabecera gana sobre la preferencia del sistema, en los dos sentidos. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #141413;
+  --surface: #1a1a19;
+  --border: #2e2e2c;
+  --grid: #2a2a28;
+  --text: #f0efec;
+  --text-2: #c3c2b7;
+  --text-3: #9a998f;
+  --accent: #3987e5;
+  --serie-1: #3987e5;
+  --serie-2: #d95926;
+  --serie-3: #199e70;
+  --bueno: #3fae3f;
+  --malo: #e66767;
+}
+
 * { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
