@@ -1,13 +1,14 @@
 :root {
   color-scheme: light;
-  --bg: #fcfcfb;
-  --surface: #ffffff;
-  --border: #e6e5e0;
-  --grid: #ecebe7;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --text-3: #75746f;
-  --accent: #2a78d6;
+  /* Claro estilo solarized: fondos ocres, tarjetas crema y tinta marrón oscura. */
+  --bg: #f3e8cf;
+  --surface: #fbf3e0;
+  --border: #e2d4b2;
+  --grid: #ebdfc3;
+  --text: #1f1d17;
+  --text-2: #57513f;
+  --text-3: #6b624d;
+  --accent: #1f68bf;
   --serie-1: #2a78d6; /* Pastilla */
   --serie-2: #eb6834; /* Ozempic */
   --serie-3: #1baf7a; /* Mounjaro */
