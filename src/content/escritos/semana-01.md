@@ -17,7 +17,7 @@ borrador: true
 | Sueño (3 noches registradas) | 5 h 52 min promedio |
 | Pasos (3 días registrados) | 10.778 promedio |
 
-Según mi aproximación de la curva promedio del [STEP-1](/fuentes/#step-1), en la primera semana Ozempic baja apenas un 0,4%: estaría en unos 124,8 kg ([cómo lo calculo](/fuentes/#calculos)). Mi promedio está ahí mismo. **Empate técnico.**
+Según mi aproximación de la curva promedio del [STEP-1](../../fuentes/#step-1), en la primera semana Ozempic baja apenas un 0,4%: estaría en unos 124,8 kg ([cómo lo calculo](../../fuentes/#calculos)). Mi promedio está ahí mismo. **Empate técnico.**
 
 ## Lo que salió bien
 

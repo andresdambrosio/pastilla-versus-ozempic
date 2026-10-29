@@ -6,6 +6,7 @@ import Carrera from '../components/Carrera.astro';
 import DatosDelDia from '../components/DatosDelDia.astro';
 import { DESAFIO } from '../data/desafio';
 import { diaDelDesafio, fechaCorta, getDiario, kg } from '../lib/stats';
+import { url } from '../lib/url';
 
 const escritos = (await getCollection('escritos')).sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
 const diario = (await getDiario()).reverse().slice(0, 3);
@@ -28,7 +29,7 @@ const diario = (await getDiario()).reverse().slice(0, 3);
   <ul class="lista">
     {escritos.map((e) => (
       <li>
-        <a href={`/escritos/${e.id}/`}>{e.data.titulo}</a>
+        <a href={url(`/escritos/${e.id}/`)}>{e.data.titulo}</a>
         {e.data.borrador && <span class="borrador">Borrador</span>}
         <p class="muted chico">{fechaCorta(e.data.fecha)} · {e.data.resumen}</p>
       </li>
@@ -39,12 +40,12 @@ const diario = (await getDiario()).reverse().slice(0, 3);
   <ul class="lista">
     {diario.map((d) => (
       <li>
-        <a href={`/diario/${d.id}/`}>Día {diaDelDesafio(d.data.fecha) + 1} · {fechaCorta(d.data.fecha)}</a>
+        <a href={url(`/diario/${d.id}/`)}>Día {diaDelDesafio(d.data.fecha) + 1} · {fechaCorta(d.data.fecha)}</a>
         <DatosDelDia dia={d} />
       </li>
     ))}
   </ul>
-  <p><a href="/diario/">Todo el diario →</a></p>
+  <p><a href={url('/diario/')}>Todo el diario →</a></p>
 </Base>
 
 <style>

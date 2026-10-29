@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { fechaLarga } from '../../lib/stats';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
   const escritos = await getCollection('escritos');
@@ -19,7 +20,7 @@ const { Content } = await render(escrito);
     <h1>{escrito.data.titulo}</h1>
     <Content />
   </article>
-  <p><a href="/escritos/">← Todos los escritos</a></p>
+  <p><a href={url('/escritos/')}>← Todos los escritos</a></p>
 </Base>
 
 <style>

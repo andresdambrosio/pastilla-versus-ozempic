@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DatosDelDia from '../../components/DatosDelDia.astro';
 import { diaDelDesafio, fechaCorta, fechaLarga, getDiario } from '../../lib/stats';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
   const dias = await getDiario();
@@ -36,8 +37,8 @@ const n = diaDelDesafio(dia.data.fecha) + 1;
     }
   </article>
   <nav class="pasos">
-    {anterior ? <a href={`/diario/${anterior.id}/`}>← {fechaCorta(anterior.data.fecha)}</a> : <span />}
-    {siguiente && <a href={`/diario/${siguiente.id}/`}>{fechaCorta(siguiente.data.fecha)} →</a>}
+    {anterior ? <a href={url(`/diario/${anterior.id}/`)}>← {fechaCorta(anterior.data.fecha)}</a> : <span />}
+    {siguiente && <a href={url(`/diario/${siguiente.id}/`)}>{fechaCorta(siguiente.data.fecha)} →</a>}
   </nav>
 </Base>
 

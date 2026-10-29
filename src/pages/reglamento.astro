@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { fechaCorta, getDiario } from '../lib/stats';
+import { url } from '../lib/url';
 
 const reglas = (await getDiario()).flatMap((d) => d.data.reglas.map((texto) => ({ texto, dia: d })));
 ---
@@ -12,7 +13,7 @@ const reglas = (await getDiario()).flatMap((d) => d.data.reglas.map((texto) => (
     {reglas.map((r) => (
       <li class="tarjeta">
         <p>{r.texto}</p>
-        <a class="chico" href={`/diario/${r.dia.id}/`}>Nació el {fechaCorta(r.dia.data.fecha)}</a>
+        <a class="chico" href={url(`/diario/${r.dia.id}/`)}>Nació el {fechaCorta(r.dia.data.fecha)}</a>
       </li>
     ))}
   </ol>

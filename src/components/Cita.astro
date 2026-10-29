@@ -1,13 +1,14 @@
 ---
 // Llamada a una fuente: un número chico que lleva a /fuentes/#id.
 import { FUENTES, fuente } from '../data/fuentes';
+import { url } from '../lib/url';
 
 interface Props { id: string }
 const f = fuente(Astro.props.id);
 const n = FUENTES.indexOf(f) + 1;
 ---
 
-<sup><a href={`/fuentes/#${f.id}`} title={`${f.corto}: ${f.titulo}`}>[{n}]</a></sup>
+<sup><a href={url(`/fuentes/#${f.id}`)} title={`${f.corto}: ${f.titulo}`}>[{n}]</a></sup>
 
 <style>
   sup { font-size: 0.7em; line-height: 0; }

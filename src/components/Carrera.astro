@@ -23,6 +23,7 @@ const carrera: Serie[] = [
 const semanas = Array.from({ length: 10 }, (_, i) => i * 8).filter((w) => w <= 72);
 
 // Zoom: desde el día 0 hasta una semana después del último pesaje (mínimo 4 semanas)
+import { url } from '../lib/url';
 const finZoom = Math.max(27, Math.ceil((ultimo + 7) / 7) * 7 - 1);
 const zoom: Serie[] = [
   { id: 'pesajes', nombre: 'Pesajes', color: 1, estilo: 'puntos', puntos: pesos },
@@ -91,8 +92,8 @@ const xTicksZoom = Array.from({ length: Math.floor(finZoom / 7) + 1 }, (_, i) =>
   }
   <p class="muted chico fuentes">
     Curvas: {RIVALES.map((r, i) => <>{i > 0 && ' · '}{r.nombre}, promedio de {r.detalle.toLowerCase()}<Cita id={r.fuente} /></>)}.
-    Los puntos intermedios son aproximados: <a href="/fuentes/#calculos">cómo se calculan</a> ·
-    <a href="/datos/">ver los datos en tabla</a>.
+    Los puntos intermedios son aproximados: <a href={url('/fuentes/#calculos')}>cómo se calculan</a> ·
+    <a href={url('/datos/')}>ver los datos en tabla</a>.
   </p>
 </div>
 

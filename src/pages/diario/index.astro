@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import DatosDelDia from '../../components/DatosDelDia.astro';
 import { diaDelDesafio, fechaLarga, getDiario } from '../../lib/stats';
+import { url } from '../../lib/url';
 
 const dias = (await getDiario()).reverse();
 ---
@@ -13,7 +14,7 @@ const dias = (await getDiario()).reverse();
     {dias.map((d) => (
       <li class="tarjeta">
         <span class="etiqueta">Día {diaDelDesafio(d.data.fecha) + 1}</span>
-        <h2><a href={`/diario/${d.id}/`}>{fechaLarga(d.data.fecha)}</a></h2>
+        <h2><a href={url(`/diario/${d.id}/`)}>{fechaLarga(d.data.fecha)}</a></h2>
         <DatosDelDia dia={d} />
       </li>
     ))}

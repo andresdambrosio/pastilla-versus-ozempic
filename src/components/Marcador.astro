@@ -1,6 +1,7 @@
 ---
 import { DESAFIO, RIVALES } from '../data/desafio';
 import { fechaCorta, getDiario, imc, kg, pesoRival, promedioMovil, seriePeso, fechaDeDia } from '../lib/stats';
+import { url } from '../lib/url';
 
 const pesos = seriePeso(await getDiario());
 const prom = promedioMovil(pesos);
@@ -47,7 +48,7 @@ const estado = Math.abs(diferencia) < 0.1 ? 'empate' : diferencia > 0 ? 'adelant
   <div class="tarjeta">
     <span class="etiqueta">Contra {ozempic.nombre}</span>
     <div class={`valor ${estado}`}>{veredicto}</div>
-    <p class="muted chico">{ozempic.nombre} promedio hoy: {kg(rival)} kg · <a href="/fuentes/#calculos">¿de dónde sale?</a></p>
+    <p class="muted chico">{ozempic.nombre} promedio hoy: {kg(rival)} kg · <a href={url('/fuentes/#calculos')}>¿de dónde sale?</a></p>
   </div>
 </section>
 

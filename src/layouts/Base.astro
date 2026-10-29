@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { url } from '../lib/url';
 
 interface Props {
   titulo?: string;
@@ -16,8 +17,9 @@ const nav = [
   { href: '/diario/', label: 'Diario' },
   { href: '/datos/', label: 'Datos' },
   { href: '/reglamento/', label: 'Reglamento' },
-];
-const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
+].map((n) => ({ ...n, href: url(n.href) }));
+const inicio = url('/');
+const activo = (href: string) => (href === inicio ? ruta === inicio || ruta === inicio.replace(/\/$/, '') : ruta.startsWith(href));
 ---
 
 <!doctype html>
@@ -27,7 +29,7 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloCompleto}</title>
     <meta name="description" content={descripcion} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
     <script is:inline>
       // Aplica el tema elegido antes de pintar, para que no parpadee.
       try {
@@ -45,7 +47,7 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
   <body>
     <header class="cabecera">
       <div class="contenedor fila">
-        <a href="/" class="marca">Pastilla <span>vs</span> Ozempic</a>
+        <a href={url('/')} class="marca">Pastilla <span>vs</span> Ozempic</a>
         <nav>
           {nav.map((n) => <a href={n.href} aria-current={activo(n.href) ? 'page' : undefined}>{n.label}</a>)}
         </nav>
@@ -68,7 +70,7 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
         Esto es un desafío personal, no un consejo médico ni una campaña contra ningún medicamento. Si estás pensando
         en bajar de peso, hablalo con tu médico.
       </p>
-      <p><a href="/fuentes/">Fuentes y cálculos</a></p>
+      <p><a href={url('/fuentes/')}>Fuentes y cálculos</a></p>
     </footer>
   </body>
 </html>

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Carrera from '../components/Carrera.astro';
 import { RIVALES } from '../data/desafio';
 import { diaDelDesafio, fechaCorta, getDiario, horas, kg, pasos, pesoRival, promedioMovil, seriePeso } from '../lib/stats';
+import { url } from '../lib/url';
 
 const dias = await getDiario();
 const promedio = new Map(promedioMovil(seriePeso(dias)).map((p) => [p.x, p.y]));
@@ -36,7 +37,7 @@ const filas = dias.reverse().map((d) => {
       <tbody>
         {filas.map(({ d, x, prom, rivales }) => (
           <tr>
-            <td><a href={`/diario/${d.id}/`}>{fechaCorta(d.data.fecha)}</a></td>
+            <td><a href={url(`/diario/${d.id}/`)}>{fechaCorta(d.data.fecha)}</a></td>
             <td>{x + 1}</td>
             <td class="num">{d.data.peso !== undefined ? kg(d.data.peso) : '—'}</td>
             <td class="num">{prom !== undefined ? kg(prom) : '—'}</td>
