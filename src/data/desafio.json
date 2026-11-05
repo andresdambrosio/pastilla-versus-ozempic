@@ -1,0 +1,118 @@
+{
+  "inicio": "2026-10-19",
+  "pesoInicial": 125.3,
+  "meta": 95,
+  "altura": 1.81,
+  "rivales": [
+    {
+      "id": "ozempic",
+      "nombre": "Ozempic",
+      "detalle": "Semaglutida 2,4 mg semanal",
+      "fuente": "step-1",
+      "serie": 2,
+      "curva": [
+        {
+          "semana": 0,
+          "cambioPct": 0
+        },
+        {
+          "semana": 4,
+          "cambioPct": -2
+        },
+        {
+          "semana": 8,
+          "cambioPct": -3.8
+        },
+        {
+          "semana": 12,
+          "cambioPct": -5.6
+        },
+        {
+          "semana": 16,
+          "cambioPct": -7.2
+        },
+        {
+          "semana": 20,
+          "cambioPct": -8.6
+        },
+        {
+          "semana": 28,
+          "cambioPct": -10.8
+        },
+        {
+          "semana": 36,
+          "cambioPct": -12.4
+        },
+        {
+          "semana": 44,
+          "cambioPct": -13.6
+        },
+        {
+          "semana": 52,
+          "cambioPct": -14.4
+        },
+        {
+          "semana": 60,
+          "cambioPct": -14.9
+        },
+        {
+          "semana": 68,
+          "cambioPct": -14.9
+        }
+      ]
+    },
+    {
+      "id": "mounjaro",
+      "nombre": "Mounjaro",
+      "detalle": "Tirzepatida 15 mg semanal",
+      "fuente": "surmount-1",
+      "serie": 3,
+      "curva": [
+        {
+          "semana": 0,
+          "cambioPct": 0
+        },
+        {
+          "semana": 4,
+          "cambioPct": -2.6
+        },
+        {
+          "semana": 8,
+          "cambioPct": -5
+        },
+        {
+          "semana": 12,
+          "cambioPct": -7.4
+        },
+        {
+          "semana": 16,
+          "cambioPct": -9.5
+        },
+        {
+          "semana": 20,
+          "cambioPct": -11.4
+        },
+        {
+          "semana": 24,
+          "cambioPct": -13.1
+        },
+        {
+          "semana": 36,
+          "cambioPct": -16.5
+        },
+        {
+          "semana": 48,
+          "cambioPct": -19
+        },
+        {
+          "semana": 60,
+          "cambioPct": -20.4
+        },
+        {
+          "semana": 72,
+          "cambioPct": -20.9
+        }
+      ]
+    }
+  ]
+}

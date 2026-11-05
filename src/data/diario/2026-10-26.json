@@ -1,0 +1,16 @@
+{
+  "fecha": "2026-10-26",
+  "pesoKg": 124.3,
+  "suenoMin": 495,
+  "pasos": 2763,
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "tres huevos duros y un café con miel."
+    },
+    {
+      "momento": "almuerzo",
+      "detalle": "dos hamburguesas al plato Goodmark con zanahoria rallada y un tomate."
+    }
+  ]
+}

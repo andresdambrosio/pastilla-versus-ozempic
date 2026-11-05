@@ -1,0 +1,12 @@
+{
+  "fecha": "2026-10-28",
+  "pesoKg": 124,
+  "suenoMin": 288,
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "dos cafés, uno amargo y un moca belga. Y algo más.",
+      "fotoPendiente": true
+    }
+  ]
+}

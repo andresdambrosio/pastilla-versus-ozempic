@@ -1,0 +1,19 @@
+{
+  "fecha": "2026-10-29",
+  "pesoKg": 123.9,
+  "suenoMin": 385,
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "una tostada de pan con palta, huevos revueltos, salmón ahumado, un café y un yogur Ser con proteína."
+    },
+    {
+      "momento": "almuerzo",
+      "detalle": "pollo con 2 remolachas, brócoli, champiñones y una pasta de tallos y hojas de brócoli."
+    },
+    {
+      "momento": "merienda",
+      "detalle": "yogur casero con 3 frutillas y 1 scoop de proteína. Además, unos 5 g de creatina monohidrato ENA."
+    }
+  ]
+}

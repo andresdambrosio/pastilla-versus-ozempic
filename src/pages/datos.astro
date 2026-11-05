@@ -39,12 +39,12 @@ const filas = dias.reverse().map((d) => {
           <tr>
             <td><a href={url(`/diario/${d.id}/`)}>{fechaCorta(d.data.fecha)}</a></td>
             <td>{x + 1}</td>
-            <td class="num">{d.data.peso !== undefined ? kg(d.data.peso) : '—'}</td>
+            <td class="num">{d.data.pesoKg !== undefined ? kg(d.data.pesoKg) : '—'}</td>
             <td class="num">{prom !== undefined ? kg(prom) : '—'}</td>
             {rivales.map((v) => <td class="num muted">{kg(v)}</td>)}
-            <td class="num">{d.data.sueno !== undefined ? horas(d.data.sueno) : '—'}</td>
+            <td class="num">{d.data.suenoMin !== undefined ? horas(d.data.suenoMin) : '—'}</td>
             <td class="num">{d.data.pasos !== undefined ? pasos(d.data.pasos) : '—'}</td>
-            <td class="num">{d.data.agua !== undefined ? `${kg(d.data.agua)} l` : '—'}</td>
+            <td class="num">{d.data.aguaLitros !== undefined ? `${kg(d.data.aguaLitros)} l` : '—'}</td>
           </tr>
         ))}
       </tbody>

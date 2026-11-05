@@ -1,0 +1,44 @@
+{
+  "fecha": "2026-10-19",
+  "pesoKg": 125.3,
+  "pasos": 11919,
+  "ejercicios": [
+    {
+      "actividad": "Caminata",
+      "km": 4.69,
+      "momento": "a la tarde"
+    }
+  ],
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "dos huevos y 6 uvas."
+    },
+    {
+      "momento": "almuerzo",
+      "detalle": "pollo a la plancha con un tomate."
+    },
+    {
+      "momento": "colacion",
+      "detalle": "un puñado de mezclado de maní, almendras, nueces, pasas de uva y pistacho.",
+      "hora": "15:30"
+    },
+    {
+      "momento": "merienda",
+      "detalle": "un capuccino y… la red velvet.",
+      "fotoPendiente": true
+    },
+    {
+      "momento": "cena",
+      "detalle": "un plato grande de ravioles con salsa de crema y hongos, y una pinta de cerveza rubia."
+    }
+  ],
+  "notas": [
+    "Mi hija se pidió una porción de torta red velvet. Casi no la tocó, y se comió mi jamón. Así que me comí la torta.",
+    "La próxima no le pido torta: pido una porción de proteína para los dos."
+  ],
+  "reglas": [
+    "Si pido para mi hija, pido proteína. Y si pide otra cosa y no la come, que me la pongan en una caja.",
+    "Costo hundido: mejor gastar plata y no engordar que gastar plata y engordar. Lo que sobra, se deja."
+  ]
+}

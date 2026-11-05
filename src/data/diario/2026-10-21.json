@@ -1,0 +1,31 @@
+{
+  "fecha": "2026-10-21",
+  "pesoKg": 124.4,
+  "suenoMin": 438,
+  "pasos": 10355,
+  "aguaLitros": 2,
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "tres ramas enteras de kale crudo, medio morrón con un huevo asado, un huevo revuelto y ¼ de durazno."
+    },
+    {
+      "momento": "almuerzo",
+      "detalle": "pollo a la plancha con hongos, pimienta y cebolla en polvo, con boniato y batata."
+    },
+    {
+      "momento": "colacion",
+      "detalle": "un té con miel."
+    },
+    {
+      "momento": "merienda",
+      "detalle": "un café y algo más.",
+      "fotoPendiente": true
+    },
+    {
+      "momento": "cena",
+      "detalle": "2 milanesas de pollo fritas con una porción mediana de papas fritas y una Coca Cola Zero.",
+      "hora": "temprano"
+    }
+  ]
+}

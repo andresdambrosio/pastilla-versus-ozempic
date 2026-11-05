@@ -1,0 +1,34 @@
+{
+  "fecha": "2026-10-20",
+  "pesoKg": 125.3,
+  "suenoMin": 334,
+  "pasos": 10059,
+  "aguaLitros": 3.5,
+  "ejercicios": [
+    {
+      "actividad": "Tenis",
+      "detalle": "singles",
+      "minutos": 120,
+      "momento": "antes del almuerzo"
+    }
+  ],
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "2 huevos revueltos con unos 150 g de pechuga de pollo y 3 ajos, todo cocinado junto. Una feta de pan blanco."
+    },
+    {
+      "momento": "almuerzo",
+      "detalle": "200 g de bife de chorizo, 8 papas noisette y una milanesa de pollo muy chica al horno."
+    },
+    {
+      "momento": "merienda",
+      "detalle": "un puñado de frutos secos con pasas (maní, almendras, nueces). Después, 2 galletitas Bagley sueltas.",
+      "hora": "16 a 17 h"
+    },
+    {
+      "momento": "cena",
+      "detalle": "una entraña chica, 10 papas noisette, dos hamburguesas chiquitas al plato, medio morrón amarillo asado y una feta de jamón."
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 ---
 import type { Dia } from '../lib/stats';
-import { horas, kg, pasos } from '../lib/stats';
+import { horas, kg, pasos, textoEjercicio } from '../lib/stats';
 
 interface Props { dia: Dia }
-const { peso, sueno, pasos: p, agua, ejercicio } = Astro.props.dia.data;
+const { pesoKg, suenoMin, pasos: p, aguaLitros, ejercicios } = Astro.props.dia.data;
 
 const datos = [
-  peso !== undefined && { label: 'Peso', valor: `${kg(peso)} kg` },
-  sueno !== undefined && { label: 'Sueño', valor: horas(sueno) },
+  pesoKg !== undefined && { label: 'Peso', valor: `${kg(pesoKg)} kg` },
+  suenoMin !== undefined && { label: 'Sueño', valor: horas(suenoMin) },
   p !== undefined && { label: 'Pasos', valor: pasos(p) },
-  agua !== undefined && { label: 'Agua', valor: `${kg(agua)} l` },
-  ejercicio && { label: 'Ejercicio', valor: ejercicio },
+  aguaLitros !== undefined && { label: 'Agua', valor: `${kg(aguaLitros)} l` },
+  ejercicios.length > 0 && { label: 'Ejercicio', valor: ejercicios.map(textoEjercicio).join(' · ') },
 ].filter(Boolean) as { label: string; valor: string }[];
 ---
 

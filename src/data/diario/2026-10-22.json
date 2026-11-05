@@ -1,0 +1,26 @@
+{
+  "fecha": "2026-10-22",
+  "pesoKg": 124.8,
+  "suenoMin": 285,
+  "objetivo": "El objetivo de hoy es dormir más, ir al gimnasio y dejar de romper las pelotas.",
+  "comidas": [
+    {
+      "momento": "desayuno",
+      "detalle": "un café negro a la mañana con una manzana verde."
+    },
+    {
+      "momento": "desayuno",
+      "detalle": "una medialuna de manteca, un avocado toast con trucha y un café americano.",
+      "lugar": "Le Pain Quotidien"
+    },
+    {
+      "momento": "almuerzo",
+      "detalle": "un ceviche norteño.",
+      "lugar": "Fabric"
+    },
+    {
+      "momento": "postre",
+      "detalle": "una barrita Laddubar de arándanos y dados crocantes de manzana Frutty."
+    }
+  ]
+}

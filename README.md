@@ -11,26 +11,41 @@ npm run dev      # http://localhost:4321
 npm run build    # genera el sitio estático en dist/
 ```
 
+## Fuente de la verdad
+
+Este repo. Todo lo que el sitio muestra sale de acá; el Google Doc "Pasti MSF" quedó como histórico hasta el 2/11/2026.
+
+- `src/data/diario/AAAA-MM-DD.json`: un archivo por día.
+- `src/data/desafio.json`: día 0, peso inicial, meta, altura y curvas de los rivales.
+- `src/data/fuentes.json`: estudios citados.
+- `src/content/escritos/`: los posts, en markdown porque son prosa.
+
 ## Cargar un día
 
-Crear `src/content/diario/AAAA-MM-DD.md`:
+Crear `src/data/diario/AAAA-MM-DD.json`. Solo `fecha` es obligatoria:
 
-```markdown
----
-fecha: 2026-10-27
-peso: 124.0        # kg, en ayunas
-sueno: 420         # minutos dormidos la noche anterior
-pasos: 10500
-agua: 2.5          # litros
-ejercicio: Gimnasio, 1 hora
-reglas:
-  - "Una regla nueva para el Reglamento"
----
-
-**Desayuno:** ...
+```json
+{
+  "fecha": "2026-11-05",
+  "pesoKg": 121.8,
+  "suenoMin": 420,
+  "pasos": 10500,
+  "aguaLitros": 2.5,
+  "objetivo": "Lo que quiero lograr hoy.",
+  "ejercicios": [
+    { "actividad": "Tenis", "detalle": "singles", "minutos": 120, "km": 4.7, "momento": "a la tarde" }
+  ],
+  "comidas": [
+    { "momento": "almuerzo", "detalle": "pollo con brócoli.", "hora": "13:00", "lugar": "Fabric", "fotoPendiente": true }
+  ],
+  "notas": ["Un párrafo por nota."],
+  "reglas": ["Una regla nueva para el Reglamento."]
+}
 ```
 
-Todos los números son opcionales. El marcador, los gráficos, la tabla de datos y el Reglamento se actualizan solos.
+`momento` de una comida: `desayuno`, `almuerzo`, `merienda`, `cena`, `colacion` o `postre`. El esquema está en
+`src/content.config.ts`, y un campo mal escrito rompe el build. El marcador, los gráficos, la tabla de datos y el
+Reglamento se actualizan solos.
 
 ## Escribir un post
 
@@ -47,6 +62,5 @@ Cada push a `main` publica el sitio en https://andresdambrosio.github.io/pastill
 
 ## Dónde está cada cosa
 
-- `src/data/desafio.ts`: día 0, peso inicial, meta, altura y las curvas de los rivales (Ozempic / Mounjaro).
 - `src/lib/stats.ts`: promedio de 7 días, interpolación de rivales y formatos.
 - `src/components/Grafico.astro`: gráfico SVG con tooltip, sin librerías.

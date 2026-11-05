@@ -1,8 +1,7 @@
 ---
-import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DatosDelDia from '../../components/DatosDelDia.astro';
-import { diaDelDesafio, fechaCorta, fechaLarga, getDiario } from '../../lib/stats';
+import { diaDelDesafio, fechaCorta, fechaLarga, getDiario, tituloComida } from '../../lib/stats';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -14,8 +13,8 @@ export async function getStaticPaths() {
 }
 
 const { dia, anterior, siguiente } = Astro.props;
-const { Content } = await render(dia);
-const vacio = !dia.body?.trim();
+const { objetivo, comidas, notas, ejercicios } = dia.data;
+const vacio = !objetivo && !comidas.length && !notas.length && !ejercicios.length;
 const n = diaDelDesafio(dia.data.fecha) + 1;
 ---
 
@@ -24,7 +23,12 @@ const n = diaDelDesafio(dia.data.fecha) + 1;
     <span class="etiqueta">Día {n}</span>
     <h1>{fechaLarga(dia.data.fecha)}</h1>
     <div class="tarjeta"><DatosDelDia dia={dia} /></div>
-    {vacio ? <p class="muted">Solo pesaje.</p> : <Content />}
+    {vacio && <p class="muted">Solo pesaje.</p>}
+    {objetivo && <blockquote>{objetivo}</blockquote>}
+    {comidas.map((c) => (
+      <p><strong>{tituloComida(c)}:</strong> {c.detalle} {c.fotoPendiente && <em>(foto pendiente)</em>}</p>
+    ))}
+    {notas.map((n) => <p>{n}</p>)}
     {
       dia.data.reglas.length > 0 && (
         <aside class="tarjeta reglas">

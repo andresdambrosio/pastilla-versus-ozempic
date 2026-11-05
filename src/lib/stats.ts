@@ -19,8 +19,8 @@ export async function getDiario(): Promise<Dia[]> {
 
 export function seriePeso(dias: Dia[]): Punto[] {
   return dias
-    .filter((d) => d.data.peso !== undefined)
-    .map((d) => ({ x: diaDelDesafio(d.data.fecha), y: d.data.peso! }));
+    .filter((d) => d.data.pesoKg !== undefined)
+    .map((d) => ({ x: diaDelDesafio(d.data.fecha), y: d.data.pesoKg! }));
 }
 
 /** Promedio móvil de los pesajes de los últimos 7 días (incluido el propio). */
@@ -33,7 +33,7 @@ export function promedioMovil(pesos: Punto[], ventana = 7): Punto[] {
 
 /** % de cambio del rival en el día x, interpolando su curva. */
 export function cambioRival(rival: Rival, x: number): number {
-  const c = rival.curva.map(([sem, pct]) => ({ x: sem * 7, y: pct }));
+  const c = rival.curva.map((p) => ({ x: p.semana * 7, y: p.cambioPct }));
   if (x <= c[0].x) return c[0].y;
   for (let i = 1; i < c.length; i++) {
     if (x <= c[i].x) {
@@ -48,7 +48,7 @@ export const pesoRival = (rival: Rival, x: number) => DESAFIO.pesoInicial * (1 +
 
 /** Curva del rival en kg, recortada a [0, hasta] días. */
 export function serieRival(rival: Rival, hasta: number): Punto[] {
-  const pts = rival.curva.map(([sem]) => sem * 7).filter((x) => x < hasta);
+  const pts = rival.curva.map((p) => p.semana * 7).filter((x) => x < hasta);
   return [...pts, hasta].map((x) => ({ x, y: pesoRival(rival, x) }));
 }
 
@@ -66,3 +66,20 @@ export const fechaLarga = (f: Date) =>
 export const horas = (min: number) => `${Math.floor(min / 60)} h ${String(min % 60).padStart(2, '0')} min`;
 
 export const pasos = (n: number) => n.toLocaleString('es-AR');
+
+export const textoEjercicio = (e: Dia['data']['ejercicios'][number]) =>
+  [e.actividad, e.detalle, e.minutos && horas(e.minutos), e.km && `${kg(e.km, 2)} km`, e.momento].filter(Boolean).join(', ');
+
+const MOMENTOS = {
+  desayuno: 'Desayuno',
+  almuerzo: 'Almuerzo',
+  merienda: 'Merienda',
+  cena: 'Cena',
+  colacion: 'Colación',
+  postre: 'Postre',
+};
+
+export const tituloComida = (c: Dia['data']['comidas'][number]) => {
+  const extra = [c.hora, c.lugar].filter(Boolean).join(', ');
+  return extra ? `${MOMENTOS[c.momento]} (${extra})` : MOMENTOS[c.momento];
+};
